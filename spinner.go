@@ -3,8 +3,8 @@ package spinner
 import (
 	"fmt"
 	"io"
+	"os"
 	"sync"
-	"syscall"
 	"time"
 
 	"golang.org/x/crypto/ssh/terminal"
@@ -15,7 +15,7 @@ const (
 	DEFAULT_FRAME_RATE = time.Millisecond * 150
 )
 
-var DefaultCharset = []string{"|", "/", "-", "\\"}
+var DefaultCharset = []string{"⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"}
 
 type Spinner struct {
 	sync.Mutex
@@ -36,7 +36,7 @@ func NewSpinner(title string) *Spinner {
 		FrameRate: DEFAULT_FRAME_RATE,
 		runChan:   make(chan struct{}),
 	}
-	if !terminal.IsTerminal(syscall.Stdout) {
+	if !terminal.IsTerminal(int(os.Stdout.Fd())) {
 		sp.NoTty = true
 	}
 	return sp
